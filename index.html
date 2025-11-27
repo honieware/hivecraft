@@ -1,0 +1,184 @@
+<html>
+    <!-- Didn't your mother teach you not to stick your nose where it don't belong? -->
+    <head>
+        <title>Hivecraft</title>
+
+        <!-- Minecraft-style font -->
+        <link href="https://fonts.cdnfonts.com/css/minecraft-3" rel="stylesheet">
+    </head>
+
+    <body class="bg">
+
+        <!-- LOGO OUTSIDE THE BLUR BOX -->
+        <img class="logo" src="assets/hivecraftlogo.png">
+
+        <!-- BLURRED CONTENT BOX -->
+        <div class="main-box">
+            <p class="ip">hivecraft.honiemun.com</p>
+            <p class="info">1.21.4 | <a href="modpack/Hivecraft.zip">Download the modpack</a></p>
+
+            <h2 id="status-title" class="countdown-title"></h2>
+            <div id="countdown-subtitle" class="countdown-subtitle"></div>
+            <div class="countdown-box">
+                <span id="countdown">Loading...</span>
+            </div>
+        </div>
+    </body>
+
+    <style>
+/* Global Minecraft font */
+body, p, h1, h2, h3, a, span {
+    font-family: 'Minecraft', sans-serif;
+}
+
+/* Fullscreen background */
+.bg {
+    background-image: url('assets/promoweek1-test5.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* LOGO placed above the blur box */
+.logo {
+    width: min(80vw, 600px);
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Gaussian-blurred panel */
+.main-box {
+    text-align: center;
+    padding: 20px 40px;
+    border-radius: 16px;
+
+    /* Glass panel with a deeper blur */
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* IP bar */
+.ip {
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 700;
+    margin: 10px 0 5px 0;
+    padding: 10px 20px;
+    background: rgba(255, 140, 0, 0.85);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Info bar */
+.info {
+    font-size: 1.2rem;
+    color: #eee;
+    margin-top: 10px;
+}
+
+.info a {
+    color: #ffd76c;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.info a:hover {
+    text-decoration: underline;
+}
+
+/* Countdown styles */
+.countdown-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #c5bcbc;
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+
+.countdown-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #b2b0b0;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.countdown-box {
+    margin-top: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 25px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+    </style>
+
+    <!-- Countdown script (unchanged) -->
+    <script>
+    function nextUTC(targetDay, targetHour = 0) {
+        const now = new Date();
+        const day = now.getUTCDay();
+        let diff = (targetDay - day + 7) % 7;
+
+        const target = new Date(Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate() + diff,
+            targetHour, 0, 0
+        ));
+
+        if (target <= now) {
+            target.setUTCDate(target.getUTCDate() + 7);
+        }
+
+        return target;
+    }
+
+    function formatCountdown(ms) {
+        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((ms / (1000 * 60)) % 60);
+        const seconds = Math.floor((ms / 1000) % 60);
+        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    function updateCountdown() {
+        const now = new Date();
+
+        const friday = nextUTC(6, 0);
+        const monday = nextUTC(1, 0);
+
+        let title, subtitle, target;
+
+        if (now >= friday && now < monday) {
+            title = "The Hivelands are open!";
+            subtitle = "Gates close in";
+            target = monday;
+        } else {
+            title = "The Hivelands open in";
+            subtitle = "";
+            target = friday;
+        }
+
+        const ms = target - now;
+
+        document.getElementById("status-title").textContent = title;
+        document.getElementById("countdown-subtitle").textContent = subtitle;
+        document.getElementById("countdown").textContent = formatCountdown(ms);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    </script>
+
+</html>
